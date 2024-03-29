@@ -3,12 +3,27 @@ package com.example.app1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.app1.databinding.ActivityMainBinding;
+import com.google.firebase.database.DatabaseReference;
+
+public class MainActivity extends BaseActivity {
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        initBaner();
+        
+    }
+
+    private void initBaner() {
+        DatabaseReference myref = database.getReference("Banner");
+        binding.progressBarBanner.setVisibility(View.VISIBLE);
+
     }
 }
