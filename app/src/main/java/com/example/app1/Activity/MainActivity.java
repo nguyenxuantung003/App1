@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 
+import com.example.app1.Adapter.Category_Adapter;
 import com.example.app1.Adapter.SliderAdapter;
+import com.example.app1.Domain.Category_Domain;
 import com.example.app1.Domain.Slider_Items;
 import com.example.app1.databinding.ActivityMainBinding;
 import com.google.firebase.database.DataSnapshot;
@@ -26,9 +29,36 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         initBaner();
-        
+        initCategory();
+    }
+
+    private void initCategory() {
+        DatabaseReference myref = database.getReference("Category");
+        binding.progressBarOffical.setVisibility(View.VISIBLE);
+        ArrayList<Category_Domain> items = new ArrayList<>();
+        myref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for (DataSnapshot issue:snapshot.getChildren()){
+                        items.add(issue.getValue(Category_Domain.class));
+                    }
+                    if(!items.isEmpty()){
+                        binding.recyclerViewOffical.setLayoutManager(new LinearLayoutManager(MainActivity.this,
+                                LinearLayoutManager.HORIZONTAL,false));
+                        binding.recyclerViewOffical.setAdapter(new Category_Adapter(items));
+
+                    }
+                    binding.progressBarOffical.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void initBaner() {
