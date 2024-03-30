@@ -1,6 +1,7 @@
 package com.example.app1.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.app1.Activity.DetailActivity;
 import com.example.app1.Domain.Items_Domain;
 import com.example.app1.databinding.ViewholderPopListBinding;
 
@@ -53,7 +55,9 @@ public class Popular_Adapter extends RecyclerView.Adapter<Popular_Adapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("object",items.get(position));
+                context.startActivity(intent);
             }
         });
     }
