@@ -1,6 +1,10 @@
 package com.example.app1.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +16,9 @@ import com.example.app1.Adapter.Size_Adapter;
 import com.example.app1.Adapter.SliderAdapter;
 import com.example.app1.Domain.Items_Domain;
 import com.example.app1.Domain.Slider_Items;
+import com.example.app1.Fragment.Description_Fragment;
+import com.example.app1.Fragment.Review_Fragment;
+import com.example.app1.Fragment.Sold_Fragment;
 import com.example.app1.Helper.ManagmentCart;
 import com.example.app1.R;
 import com.example.app1.databinding.ActivityDetailBinding;
@@ -37,6 +44,7 @@ public class DetailActivity extends BaseActivity {
         getBundler();
         banners();
         initSize();
+        setupViewPager();
 
         
     }
@@ -78,4 +86,52 @@ public class DetailActivity extends BaseActivity {
         });
         binding.backBtn.setOnClickListener(v -> finish());
     }
+    private void setupViewPager(){
+        ViewPagerAdapter adapter= new ViewPagerAdapter(getSupportFragmentManager());
+        Description_Fragment tab1 = new Description_Fragment();
+        Review_Fragment tab2 = new Review_Fragment();
+        Sold_Fragment tab3 = new Sold_Fragment();
+        Bundle bundle1 = new Bundle();
+        Bundle bundle2 = new Bundle();
+        Bundle bundle3 = new Bundle();
+        bundle1.putString("description",obj.getDescription());
+        tab1.setArguments(bundle1);
+        tab2.setArguments(bundle2);
+        tab3.setArguments(bundle3);
+
+        adapter.addFragment(tab1,"Description");
+        adapter.addFragment(tab2,"Review");
+        adapter.addFragment(tab3,"Sold");
+        binding.viewpager.setAdapter(adapter);
+         binding.taplayout.setupWithViewPager(binding.viewpager);
+
+    }
+    private class ViewPagerAdapter extends FragmentPagerAdapter{
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+         private final  List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position) ;
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+        private void addFragment(Fragment fragment, String title){
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+        @Override
+        public CharSequence getPageTitle(int position){
+            return mFragmentTitleList.get(position);
+        }
+    }
+
 }
