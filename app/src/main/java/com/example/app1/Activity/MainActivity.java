@@ -1,5 +1,6 @@
 package com.example.app1.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -35,6 +36,12 @@ public class MainActivity extends BaseActivity {
         initBaner();
         initCategory();
         initPopular();
+        bottomNavication();
+
+    }
+
+    private void bottomNavication() {
+        binding.cartBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CartActivity.class)));
     }
 
     private void initPopular() {
